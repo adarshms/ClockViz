@@ -10,6 +10,9 @@
 	<!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">-->
   </head>
   <body>
+      <img src="awhile.png" height = 80 width=1500>
+          <div id="output"></div>
+
 	<div id="container" ></div>
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.1.min.js"></script>
 	<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>-->
@@ -34,6 +37,7 @@
 				startRotation[target] = this.rotation();
 				startX[target] = mousePos.x;
 				startY[target] = mousePos.y;
+
 			});
         
 			// add listeners to container
@@ -62,7 +66,25 @@
 					if ((x1 < 0 && x2 >=0) || (x2 < 0 && x1 >=0)) {
 						angleDiff += 180;
 					}
-					wheels[target].setRotation(startRotation[target] - angleDiff);
+                                           wheels[target].setRotation(startRotation[target] - angleDiff);
+                                           var rot = wheels[target].getRotation() % 360
+                                           
+                                           time =   [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+                                           hours = time.map(function(x) { return x * 24; });
+                                           minutes = time.map(function(x) { return x * 24*60; });
+                                           seconds = time.map(function(x) { return x * 24*60*60; });
+                                           if(rot<0) rot = 360+rot
+                                           document.getElementById("output").innerHTML = "angle="+rot
+                                           
+                                           if(rot>334 || rot<25) {time = seconds}
+                                           else if(rot>283)  {time = minutes}
+                                           else if(rot>231) {time = hours}
+                                           
+                                           wheels[0] = createWheel(0,550,45,25,time,[204,204,204], stage, 600, 20)
+                                           layer.add(wheels[0])
+
+                                           
+                                          
 				}
 			}, false);
 		}
@@ -123,7 +145,7 @@
 					lastRotation[1] = wheels[1].getRotation();
 			}, layer);
 			anim1.start();
-			
+			blerg();
 			var anim3 = new Kinetic.Animation(function animate(frame) {
 					var angularVelocityChange = angularVelocity[3] * frame.timeDiff * (1 - ANGULAR_FRICTION) / 1000;
 					angularVelocity[3] -= angularVelocityChange;
